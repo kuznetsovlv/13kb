@@ -1,15 +1,17 @@
 {
-  "name": "13kb",
-  "version": "1.0.0",
-  "description": "Game Engine",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Kuznetsov Leonid",
-  "license": "ISC",
-  "dependencies": {},
-  "devDependencies": {
-    "webpack": "^1.13.1"
-  }
+	"name": "13kb",
+	"version": "1.0.0",
+	"description": "Game Engine",
+	"main": "index.js",
+	"scripts": {
+		"build": "NODE_ENV=product webpack",
+		"dev": "NODE_ENV=development webpack -p",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Kuznetsov Leonid",
+	"license": "ISC",
+	"dependencies": {},
+	"devDependencies": {
+		"webpack": "^1.13.1"
+	}
 }
