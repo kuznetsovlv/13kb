@@ -1,7 +1,6 @@
 "use strict";
 
 const webpack = require('webpack');
-const path = require('path');
 
 const NODE_ENV = process.env.NODE_ENV || "development";
 const DEV = NODE_ENV === "development";
@@ -13,12 +12,9 @@ const plugins = [
 ];
 
 module.exports = {
-	entry: {
-		home: './src/home'
-	},
+	entry: './home',
 	output: {
-		filename: '[name].js',
-		path: path.resolve(__dirname, 'public'),
+		filename: 'build.js',
 		library: 'home'
 	},
 
