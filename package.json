@@ -4,7 +4,7 @@
   "description": "Game Engine",
   "main": "index.js",
   "scripts": {
-  	"clear": "rm -rf public/*.{js,map}",
+  	"clear": "rm -rf public/*.js public/*.map",
     "build": "rm -rf public/*.map && NODE_ENV=product webpack -p",
     "dev": "npm run clear && NODE_ENV=development webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
