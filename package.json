@@ -4,8 +4,9 @@
   "description": "Game Engine",
   "main": "index.js",
   "scripts": {
-    "build": "NODE_ENV=product webpack -p",
-    "dev": "NODE_ENV=development webpack",
+  	"clear": "rm -rf public/*.{js,map}",
+    "build": "rm -rf public/*.map && NODE_ENV=product webpack -p",
+    "dev": "npm run clear && NODE_ENV=development webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Kuznetsov Leonid",

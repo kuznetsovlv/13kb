@@ -6,16 +6,32 @@ const path = require('path');
 const NODE_ENV = process.env.NODE_ENV || "development";
 const DEV = NODE_ENV === "development";
 
+const entries = 'home'.split(',');
+
+const entry = entries.reduce((a, b) => {
+	a[b] = `./${b}`;
+	return a;
+}, {});
+
+
 const plugins = [
+	new webpack.NoErrorsPlugin(),
 	new webpack.DefinePlugin({
 		DEV: JSON.stringify(DEV)
 	})
 ];
 
+if (entries.length > 1)
+	plugins.push(new webpack.optimize.CommonsChunkPlugin({
+		name: 'common',
+		minChunks: 2
+	}));
+
 module.exports = {
-	entry: {
-		home: './src/home'
-	},
+	context: path.resolve(__dirname, 'src'),
+
+	entry: entry,
+
 	output: {
 		filename: '[name].js',
 		path: path.resolve(__dirname, 'public'),
