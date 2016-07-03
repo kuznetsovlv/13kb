@@ -1,7 +1,9 @@
 "use strict";
 
-const welcome = require('./welcome');
+import welcome from './welcome';
+import test from './test';
 
 welcome('home');
+test('test');
 
-exports.welcome = welcome;
+export default welcome;
