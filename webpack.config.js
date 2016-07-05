@@ -35,7 +35,7 @@ module.exports = {
 	output: {
 		filename: '[name].js',
 		path: path.resolve(__dirname, 'public'),
-		library: 'home'
+		library: '_13kb'
 	},
 
 	watch: DEV,
