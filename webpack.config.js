@@ -5,8 +5,9 @@ const path = require('path');
 
 const NODE_ENV = process.env.NODE_ENV || "development";
 const DEV = NODE_ENV === "development";
+const TEST = NODE_ENV === "test";
 
-const entries = 'index'.split(',');
+const entries = (TEST ? 'test' : 'index').split(',');
 
 const entry = entries.reduce((a, b) => {
 	a[b] = `./${b}`;
@@ -17,7 +18,9 @@ const entry = entries.reduce((a, b) => {
 const plugins = [
 	new webpack.NoErrorsPlugin(),
 	new webpack.DefinePlugin({
-		DEV: JSON.stringify(DEV)
+		NODE_ENV: JSON.stringify(NODE_ENV),
+		DEV: JSON.stringify(DEV),
+		TEST: JSON.stringify(TEST)
 	})
 ];
 
@@ -32,21 +35,25 @@ module.exports = {
 
 	entry: entry,
 
-	output: {
+	output: TEST ? {
+		filename: 'index.js',
+		path: path.resolve(__dirname, 'public'),
+		library: '_13kb'
+	} : {
 		filename: '[name].js',
 		path: path.resolve(__dirname, 'public'),
 		library: '_13kb'
 	},
 
-	watch: DEV,
+	watch: DEV || TEST,
 
 	watchOptions: {
 		aggregateTimeout: 100
 	},
 
-	devtool: DEV ? "cheap-source-map" : null,
+	devtool: DEV || TEST ? "cheap-source-map" : null,
 
-	plugins: DEV ? plugins : plugins.concat(new webpack.optimize.UglifyJsPlugin({compress: { warnings: false, drop_console: true, unsafe: true }})),
+	plugins: DEV || TEST ? plugins : plugins.concat(new webpack.optimize.UglifyJsPlugin({compress: { warnings: false, drop_console: true, unsafe: true }})),
 
 	resolve: {
 		modulesDirectories: ['node_modules'],

@@ -7,6 +7,7 @@
   	"clear": "rm -rf public/*.js public/*.map",
     "build": "rm -rf public/*.map && NODE_ENV=product webpack -p",
     "dev": "npm run clear && NODE_ENV=development webpack",
+    "try": "npm run clear && NODE_ENV=test webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Kuznetsov Leonid",
