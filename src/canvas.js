@@ -4,7 +4,7 @@ const {screen: {availWidth, availHeight}} = window;
 
 const that = {};
 
-let zoneList = [];
+let layerList = [];
 
 function configure (elem, attrs = {}) {
 	for (let key in attrs)
@@ -39,20 +39,30 @@ export default class Canvas {
 		return that.canvas;
 	}
 
-	addZone (zone) {
-		zone.context = that.context;
-		zoneList.push(zone);
+	addZone (layer) {
+		layer.context = that.context;
+		layerList.push(layer);
 
 		return this;
 	}
 
-	removeZone (zoneId) {
-		zoneList = zoneList.filter(({id}) => id !== zoneId);
+	removeZone (layerId) {
+		layerList = layerList.filter(({id}) => id !== layerId);
 		return this;
 	}
 
-	redraw () {
-		zoneList.forEach(zone => zone.redraw(true)); //Simple redraw: redraw only zone, not zones above.
+	redraw (layerId) {
+
+
+		if (!id) {
+			layerList.forEach(layer => layer.redraw(true)); //Simple redraw: redraw only layer, not layers above.
+		} else {
+			const index = layerList.reduce((a, {id}, i) => a = layerId === id ? i : a, -1);
+
+			if (index >= 0)
+				layerList.slice(i).forEach(layer => layer.redraw(true)); //Simple redraw: redraw only layer, not layers above.
+		}
+		
 		return this;
 	}
 }
