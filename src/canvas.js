@@ -21,7 +21,8 @@ export default class Canvas {
 
 		that.canvas = document.createElement('canvas');
 
-		configure(that.canvas, {width, height});
+		that.canvas.width = width;
+		that.canvas.height = height;
 		configure(that.canvas, attrs);
 
 		elem.appendChild(that.canvas);
