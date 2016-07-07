@@ -4,7 +4,9 @@ import createCanvas from './createCanvas';
 
 const {screen: {availWidth, availHeight}} = window;
 
-let that = {};
+let that = {
+	background: x => x
+};
 
 let fragmentList = [];
 
@@ -23,7 +25,7 @@ export default class Canvas {
 
 		that = {...that, ...createCanvas()}
 
-		'addFragment,removeFragment,redraw'.split(',').forEach(key => this[key] = this[key].bind(this));
+		'addFragment,removeFragments,redraw'.split(',').forEach(key => this[key] = this[key].bind(this));
 	}
 
 	get context () {
@@ -34,20 +36,70 @@ export default class Canvas {
 		return that.canvas;
 	}
 
-	addFragment (fragment) {
-		fragment.context = that.context;
-		fragmentList.push(fragment);
+	addFragment (fragment, pos = -1) {
+		const {length} = fragmentList;
+
+		while (pos < 0)
+			pos += length;
+
+		if (pos > length)
+			pos = length;
+
+		fragment.setContext(that.context);
+		fragmentList.splice(pos, 0, fragment);
 
 		return this;
 	}
 
-	removeFragment (fragmentId) {
-		fragmentList = fragmentList.filter(({id}) => id !== fragmentId);
+	clear () {
+		that.background();
+
 		return this;
 	}
 
-	redraw () {
-		fragmentList.forEach(fragment => fragment.redraw());
+	distClear () {
+		that.context.clearRect(0, 0, that.width, that.height);
+	}
+
+	setBackground (func) {
+		if (typeof func !== 'function')
+			throw new Error('Argument must be a function');
+
+		that.background = func.bind(that);
+
+		return this;
+	}
+
+	removeFragments (...fragmentIds) {
+
+		fragmentIds = fragmentIds.reduce((a, b) => {a[b] = b; return a;}, {});
+
+		fragmentList.filter(({id}) => id === fragmentIds[id]).forEach(fragment => fragment.setContext(null));
+
+		fragmentList = fragmentList.filter(({id}) => id !== fragmentIds[id]);
+
+		return this;
+	}
+
+	redraw (begin = 0) {
+
+		if (!begin)
+			that.background();
+
+		fragmentList.splice(begin).forEach(fragment => fragment.redraw());
+		return this;
+	}
+
+	sort (...ids) {
+		if (typeof ids[0] === 'function')
+			fragmentList = fragmentList.sort(ids[0]) 
+		else {
+			if (ids[0] instanceof Array)
+				ids = ids[0];
+
+			fragmentList = fragmentList.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
+		}
+
 		return this;
 	}
 }
