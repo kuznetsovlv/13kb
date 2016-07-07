@@ -1,10 +1,12 @@
 "use strict";
 
+import createCanvas from './createCanvas';
+
 const {screen: {availWidth, availHeight}} = window;
 
-const that = {};
+let that = {};
 
-let layerList = [];
+let fragmentList = [];
 
 function configure (elem, attrs = {}) {
 	for (let key in attrs)
@@ -19,17 +21,9 @@ export default class Canvas {
 
 		const {width=availWidth, height=availHeight, ...attrs} = params;
 
-		that.canvas = document.createElement('canvas');
+		that = {...that, ...createCanvas()}
 
-		that.canvas.width = width;
-		that.canvas.height = height;
-		configure(that.canvas, attrs);
-
-		elem.appendChild(that.canvas);
-
-		that.context = that.canvas.getContext('2d');
-
-		'addZone,removeZone,redraw'.split(',').forEach(key => this[key] = this[key].bind(this));
+		'addFragment,removeFragment,redraw'.split(',').forEach(key => this[key] = this[key].bind(this));
 	}
 
 	get context () {
@@ -40,30 +34,20 @@ export default class Canvas {
 		return that.canvas;
 	}
 
-	addZone (layer) {
-		layer.context = that.context;
-		layerList.push(layer);
+	addFragment (fragment) {
+		fragment.context = that.context;
+		fragmentList.push(fragment);
 
 		return this;
 	}
 
-	removeZone (layerId) {
-		layerList = layerList.filter(({id}) => id !== layerId);
+	removeFragment (fragmentId) {
+		fragmentList = fragmentList.filter(({id}) => id !== fragmentId);
 		return this;
 	}
 
-	redraw (layerId) {
-
-
-		if (!id) {
-			layerList.forEach(layer => layer.redraw(true)); //Simple redraw: redraw only layer, not layers above.
-		} else {
-			const index = layerList.reduce((a, {id}, i) => a = layerId === id ? i : a, -1);
-
-			if (index >= 0)
-				layerList.slice(i).forEach(layer => layer.redraw(true)); //Simple redraw: redraw only layer, not layers above.
-		}
-		
+	redraw () {
+		fragmentList.forEach(fragment => fragment.redraw());
 		return this;
 	}
 }
