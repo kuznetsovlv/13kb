@@ -14,6 +14,15 @@ const entry = entries.reduce((a, b) => {
 	return a;
 }, {});
 
+const BABEL_QUERY = {
+  presets: ['es2015'],
+  plugins: [
+    ['transform-object-rest-spread'],
+    ['transform-class-properties'],
+    ['transform-decorators-legacy']
+  ]
+};
+
 
 const plugins = [
 	new webpack.NoErrorsPlugin(),
@@ -53,7 +62,7 @@ module.exports = {
 
 	devtool: DEV || TEST ? "cheap-source-map" : null,
 
-	plugins: DEV || TEST ? plugins : plugins.concat(new webpack.optimize.UglifyJsPlugin({compress: { warnings: false, drop_console: true, unsafe: true }})),
+	plugins: DEV || TEST ? plugins : plugins.concat(new webpack.optimize.UglifyJsPlugin({compress: { warnings: false, drop_console: true, unsafe: true }}), new webpack.optimize.OccurenceOrderPlugin(), new webpack.ProvidePlugin({Promise: 'imports?this=>global!exports?global.Promise!es6-promise','fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'})),
 
 	resolve: {
 		modulesDirectories: ['node_modules'],
@@ -70,7 +79,8 @@ module.exports = {
 		loaders: [{
 			exclude: /node_modules/,
 			test: /\.js$/,
-			loader: 'babel?optional[]=runtime'
+			loader: 'babel',
+			query: BABEL_QUERY
 		}]
 	}
 }
