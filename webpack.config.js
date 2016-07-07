@@ -19,7 +19,7 @@ const BABEL_QUERY = {
   plugins: [
     ['transform-object-rest-spread'],
     ['transform-class-properties'],
-    ['transform-decorators-legacy']
+    // ['transform-decorators-legacy']
   ]
 };
 
@@ -31,6 +31,17 @@ const plugins = [
 		DEV: JSON.stringify(DEV),
 		TEST: JSON.stringify(TEST)
 	})
+];
+
+const productPlugins = [
+	new webpack.optimize.UglifyJsPlugin({
+		compress: { warnings: false, drop_console: true, unsafe: true }
+	}),
+	// new webpack.optimize.OccurenceOrderPlugin(),
+	// new webpack.ProvidePlugin({
+	// 	Promise: 'imports?this=>global!exports?global.Promise!es6-promise',
+	// 	'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
+	// })
 ];
 
 if (entries.length > 1)
@@ -62,7 +73,7 @@ module.exports = {
 
 	devtool: DEV || TEST ? "cheap-source-map" : null,
 
-	plugins: DEV || TEST ? plugins : plugins.concat(new webpack.optimize.UglifyJsPlugin({compress: { warnings: false, drop_console: true, unsafe: true }}), new webpack.optimize.OccurenceOrderPlugin(), new webpack.ProvidePlugin({Promise: 'imports?this=>global!exports?global.Promise!es6-promise','fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'})),
+	plugins: DEV || TEST ? plugins : plugins.concat(productPlugins),
 
 	resolve: {
 		modulesDirectories: ['node_modules'],
