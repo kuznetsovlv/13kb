@@ -8,7 +8,7 @@ function checkItem (item, id) {
 }
 
 export default class Item {
-	constructor (id, draw, x = 0, y =0) {
+	constructor (id, draw, x = 0, y =0, props = {}) {
 
 		if (!id || items[id])
 			throw new Error('Element Item must have an unique id.');
@@ -16,9 +16,9 @@ export default class Item {
 		if (typeof draw !== 'function')
 			throw new Errror ('The "draw" method must be a function.');
 
-		items[id] = {id, draw: draw.bind(this), x, y, item: this};
+		items[id] = {id, draw: draw.bind(this), x, y, props, item: this};
 
-		this.id = id;
+		this.id = {get: () => id};
 	}
 
 	getContext () {
@@ -35,12 +35,38 @@ export default class Item {
 		return this;
 	}
 
+	getProps (name) {
+		const {id} = this;
+		checkItem(this, id);
+		const {props} = items[id];
+
+		return name ? props[name] : props;
+	}
+
+	setProps (props = {}, mod) {
+		const {id} = this;
+		checkItem(this, id);
+
+		if (mod) {
+			const item = items[id];
+
+			item[id] = {...item, ...props, item: this}
+
+		} else {
+			items[id].props = {...props};
+		}
+	}
+
 	redraw () {
 		const {id} = this;
 		checkItem(this, id);
-		const {draw, x, y, context} = items[id];
+		const {draw, x, y, props, context} = items[id];
 
-		draw(context, x, y);
+		context.save();
+
+		draw(context, x, y, props);
+
+		context.restore();
 
 		return this;
 	}
