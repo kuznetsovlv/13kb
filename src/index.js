@@ -1,6 +1,4 @@
 "use strict";
 
-import Canvas from './canvas';
-import Item   from './item';
-
-export {Canvas, Item};
+export {default as Canvas} from './canvas/Canvas';
+export {default as Item}   from './canvas/Item';
