@@ -18,7 +18,7 @@ export default class Item {
 
 		items[id] = {id, draw: draw.bind(this), x, y, props, item: this};
 
-		this.id = {get: () => id};
+		this.id = id; //{get: () => id};
 	}
 
 	getContext () {

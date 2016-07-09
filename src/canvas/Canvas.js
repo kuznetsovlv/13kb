@@ -40,7 +40,7 @@ export default class Canvas {
 		const {length} = fragmentList;
 
 		while (pos < 0)
-			pos += length;
+			pos += (length || 1);
 
 		if (pos > length)
 			pos = length;
@@ -59,6 +59,8 @@ export default class Canvas {
 
 	distClear () {
 		that.context.clearRect(0, 0, that.width, that.height);
+
+		return this;
 	}
 
 	setBackground (func) {
@@ -86,7 +88,7 @@ export default class Canvas {
 		if (!begin)
 			that.background();
 
-		fragmentList.splice(begin).forEach(fragment => fragment.redraw());
+		fragmentList.slice(begin).forEach(fragment => fragment.redraw());
 		return this;
 	}
 
