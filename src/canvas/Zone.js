@@ -13,13 +13,6 @@ function resProps (props) {
 	return {...props, border, width, height, fragmentList};
 }
 
-// function draw (context, x, y, {width, height, border: {lineWidth = 0, strokeStyle="rgba(0, 0, 0, 0)"}}) {
-// 	context.clearRect(x, y, width, height);
-// 	context.lineWidth = lineWidth;
-// 	context.strokeStyle = strokeStyle;
-// 	context.strokeRect();
-// }
-
 export default class Zone extends Item {
 	constructor (id, x, y, scale = {x: 1, y: 1}, props = {}, predraw, postdraw) {
 		super (id, x => x, x, y, {...resProps(props), scale: resScale(scale)});
