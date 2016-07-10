@@ -1,11 +1,6 @@
 "use strict";
 
-import items from '../private';
-
-function checkItem (item, id) {
-	if (items[id].item !== item)
-		throw new Error ("Structure destroied!");
-}
+import {items, checkItem} from '../private';
 
 export default class Item {
 	constructor (id, draw, x = 0, y =0, props = {}) {
@@ -22,30 +17,23 @@ export default class Item {
 	}
 
 	getContext () {
-		const {id} = this;
-		checkItem(this, id);
-		return items[id].context;
+		return items[checkItem(this)].context;
 	}
 
 	setContext (context) {
-		const {id} = this;
-		checkItem(this, id);
-		items[id].context = context;
+		items[checkItem(this)].context = context;
 
 		return this;
 	}
 
 	getProps (name) {
-		const {id} = this;
-		checkItem(this, id);
-		const {props} = items[id];
+		const {props} = items[checkItem(this)];
 
 		return name ? props[name] : props;
 	}
 
 	setProps (props = {}, mod) {
-		const {id} = this;
-		checkItem(this, id);
+		const id = checkItem(this);
 
 		if (mod) {
 			const item = items[id];
@@ -58,9 +46,7 @@ export default class Item {
 	}
 
 	redraw () {
-		const {id} = this;
-		checkItem(this, id);
-		const {draw, x, y, props, context} = items[id];
+		const {draw, x, y, props, context} = items[checkItem(this)];
 
 		context.save();
 
@@ -72,10 +58,7 @@ export default class Item {
 	}
 
 	remove () {
-		const {id} = this;
-		checkItem(this, id);
-
-		delete items[id];
+		delete items[checkItem(this)];
 		delete this.id;
 	}
 }

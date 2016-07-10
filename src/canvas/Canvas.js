@@ -94,12 +94,12 @@ export default class Canvas {
 
 	sort (...ids) {
 		if (typeof ids[0] === 'function')
-			fragmentList = fragmentList.sort(ids[0]) 
+			fragmentList.sort(ids[0]) 
 		else {
 			if (ids[0] instanceof Array)
 				ids = ids[0];
 
-			fragmentList = fragmentList.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
+			fragmentList.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
 		}
 
 		return this;
