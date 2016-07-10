@@ -4,7 +4,7 @@ import Item		from './canvas/Item';
 import animator	from './animate/animator';
 
 export default function () {
-	const canvas = new Canvas(document.body);
+	const canvas = new Canvas(document.body, {width: 500, height: 500});
 
 	const context = canvas.context;
 

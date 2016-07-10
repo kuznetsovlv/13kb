@@ -23,7 +23,7 @@ export default class Canvas {
 
 		const {width=availWidth, height=availHeight, ...attrs} = params;
 
-		that = {...that, ...createCanvas()}
+		that = {...that, ...createCanvas({...params, width, height}, elem)}
 
 		'addFragment,removeFragments,redraw'.split(',').forEach(key => this[key] = this[key].bind(this));
 	}
