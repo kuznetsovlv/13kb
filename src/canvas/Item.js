@@ -1,6 +1,6 @@
 "use strict";
 
-const items = {};
+import items from '../private';
 
 function checkItem (item, id) {
 	if (items[id].item !== item)
