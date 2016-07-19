@@ -28,5 +28,5 @@ export default function expander (elem, ...interfaces) {
 		return this;
 	}).bind(elem);
 
-	elem.apply(elem, interfaces);
+	return elem.apply(elem, interfaces);
 }
