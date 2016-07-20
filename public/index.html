@@ -1,46 +1,48 @@
 
 <style type="text/css">
 	* {
+		font-family: serif;
 		padding: 0;
 		margin: 0;
-		height: 100%;
-		width: 100%;
 		vertical-align: top;
 	}
 
-	#test-main {
-		width: 500px;
-		height: 500px;
+	h1 {
+		font-size: 32px;
+		font-weight: bold;
+		text-align: center;
+		text-decoration: underline;
+		color: #555;
+		padding: 10px;
+		height: 36px;
+		line-height: 36px;
+
 	}
 
-	#test-secondary {
-		display: none;
+	li {
+		padding-left: 15px;
 	}
 
-	canvas {
-		display: block;
-		position: fixed;
-		height: 500px;
-		width: 500px;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		margin: auto;
-
-		border: 1px solid #000;
+	li:not(:last-child) {
+		margin-bottom: 5px;
 	}
+
+	a {
+		font-size: 20px;
+		text-decoration: none;
+		font-style: italic;
+		color: #09f8df;
+	}
+
+	a:hover {
+		font-size: 21px;
+		color: #f809f0;
+		text-decoration: underline;
+		text-shadow: 2px 3px 2px #fa0bf2;
+	}
+
+	
 </style>
-<script type="text/javascript" src="index.js"></script>
-<script type="text/javascript">
-	window.onload = function () {
-		try {
-			new _13kb.Canvas(document.body);
-			new _13kb.Item('1', x=>x);
-
-			_13kb.animator(x => console.log(x));
-		} catch (e) {
-			_13kb.default();
-		}
-	}
-</script>
+<h1>Tests</h1>
+<ul>
+<li><a href="./examples/girl">Girl.
