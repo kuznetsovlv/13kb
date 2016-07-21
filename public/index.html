@@ -4,14 +4,12 @@
 		font-family: serif;
 		padding: 0;
 		margin: 0;
-		vertical-align: top;
 	}
 
 	h1 {
 		font-size: 32px;
 		font-weight: bold;
 		text-align: center;
-		text-decoration: underline;
 		color: #555;
 		padding: 10px;
 		height: 36px;
@@ -19,8 +17,14 @@
 
 	}
 
+	ul {
+		list-style-type: disc;
+		margin-left: 25px;
+		color: #09f8df;
+	}
+
 	li {
-		padding-left: 15px;
+		padding-left: 2px;
 	}
 
 	li:not(:last-child) {
@@ -31,10 +35,10 @@
 		font-size: 20px;
 		text-decoration: none;
 		font-style: italic;
-		color: #09f8df;
+		color: inherit;
 	}
 
-	a:hover {
+	li:hover {
 		font-size: 21px;
 		color: #f809f0;
 		text-decoration: underline;
@@ -46,3 +50,4 @@
 <h1>Tests</h1>
 <ul>
 <li><a href="./examples/girl">Girl.
+<li><a href="./examples/snake">Snake.
