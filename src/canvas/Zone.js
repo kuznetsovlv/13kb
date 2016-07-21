@@ -17,8 +17,10 @@ export default class Zone extends Item {
 	constructor (id, x, y, scale = {x: 1, y: 1}, props = {}, predraw, postdraw) {
 		super (id, x => x, x, y, {...resProps(props), scale: resScale(scale)});
 
-		items[id].predraw = predraw;
-		items[id].postdraw = postdraw;
+		if (predraw)
+			items[id].predraw = predraw.bind(this);
+		if (postdraw)
+			items[id].postdraw = postdraw.bind(this);
 
 	}
 
@@ -32,7 +34,7 @@ export default class Zone extends Item {
 		if (pos > length)
 			pos = length;
 
-		fragment.setContext(that.context);
+		fragment.setContext(items[checkItem(this)].context);
 		fragmentList.splice(pos, 0, fragment);
 
 		return this;
@@ -45,27 +47,29 @@ export default class Zone extends Item {
 
 	redraw () {
 		const {x, y, props, context, predraw, postdraw} = items[checkItem(this)];
-		const {border: {lineWidth = 0, strokeStyle="rgba(0, 0, 0, 0)"}, scale: {x:sx, y:sy}, fragmentList} = props;
+		const {border: {lineWidth = 0, strokeStyle="rgba(0, 0, 0, 0)"}, scale: {x:sx, y:sy}, fragmentList, width, height} = props;
 
-		context.clearRect(x, y, width, height);
+		
 		context.save();
 		context.lineWidth = lineWidth;
 		context.strokeStyle = strokeStyle;
-		context.strokeRect(x, y, width, height);
-		context.clip();
+		
 
 		context.translate(x, y);
+		context.clearRect(0, 0, width, height);
+		context.strokeRect(0, 0, width, height);
+		// context.clip();
 		context.scale(sx, sy);
 
 		if (predraw)
-			predraw();
+			predraw(context, x, y, props);
 
 		fragmentList.forEach(fragment => fragment.redraw());
 
-		context.restore();
-
 		if (postdraw)
-			postdraw();
+			postdraw(context, x, y, props);
+
+		context.restore();
 
 		return this;
 	}

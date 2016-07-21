@@ -3,7 +3,7 @@
 import {items, checkItem} from '../private';
 
 export default class Item {
-	constructor (id, draw, x = 0, y =0, props = {}) {
+	constructor (id, draw, x = 0, y = 0, props = {}) {
 
 		if (!id || items[id])
 			throw new Error('Element Item must have an unique id.');
@@ -36,13 +36,15 @@ export default class Item {
 		const id = checkItem(this);
 
 		if (mod) {
-			const item = items[id];
+			const {props:oldProps} = items[id];
 
-			item[id] = {...item, ...props, item: this}
+			items[id].props = {...oldProps, ...props}
 
 		} else {
 			items[id].props = {...props};
 		}
+
+		return this;
 	}
 
 	redraw () {
