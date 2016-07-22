@@ -8,7 +8,7 @@
 		var CELLS = 20;
 		var CELL_SIZE = ROOM_SIZE / CELLS;
 		var CELL_STYLE_FREE = 0;
-		var CELL_CTYLE_FOOD = 1;
+		var CELL_STYLE_FOOD = 1;
 		var CELL_STYLE_SNAKE = 2;
 
 		var canvas = new Canvas(document.body, {width: CANVAS_WIDTH, height: CANVAS_HEIGHT});
@@ -24,8 +24,6 @@
 			}
 		);
 
-		canvas.addFragment(room);
-
 
 		var pixels = [];
 
@@ -37,7 +35,7 @@
 					function (context, x, y, props) {
 						switch (props.style) {
 							case CELL_STYLE_FREE: context.fillStyle = 'rgba(0,0,0,0)'; break;
-							case CELL_CTYLE_FOOD: context.fillStyle = '#f00'; break;
+							case CELL_STYLE_FOOD: context.fillStyle = '#f00'; break;
 							case CELL_STYLE_SNAKE: context.fillStyle = '#00f'; break;
 							default: throw new Error("Incorrect cell style.");
 						}
@@ -51,13 +49,14 @@
 						return this.setProps({style: style}, true)
 					}
 
-				}).setStyle(CELL_STYLE_FREE);
+				}).setStyle(CELL_STYLE_FOOD);
 				row.push(item);
 				room.addFragment(item);
 			}
 			pixels.push(row);
 		}
 
+		canvas.addFragment(room);
 		canvas.redraw();
 	}
 })(_13kb.Canvas, _13kb.Item, _13kb.Zone, _13kb.animator, _13kb.expander, _13kb.events);

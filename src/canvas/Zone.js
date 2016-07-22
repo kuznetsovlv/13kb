@@ -88,6 +88,16 @@ export default class Zone extends Item {
 		return this;
 	}
 
+	setContext (context) {
+		super.setContext(context);
+
+		const {props: {fragmentList}}  = items[checkItem(this)];
+
+		fragmentList.forEach(f => f.setContext(context));
+
+		return this;
+	}
+
 	sort (...ids) {
 		const {props: {fragmentList}}  = items[checkItem(this)];
 
