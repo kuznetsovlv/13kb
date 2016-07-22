@@ -14,8 +14,8 @@ function resProps (props) {
 }
 
 export default class Zone extends Item {
-	constructor (id, x, y, scale = {x: 1, y: 1}, props = {}, predraw, postdraw) {
-		super (id, x => x, x, y, {...resProps(props), scale: resScale(scale)});
+	constructor (id, draw, x, y, scale = {x: 1, y: 1}, props = {}, predraw, postdraw) {
+		super (id, draw, x, y, {...resProps(props), scale: resScale(scale)});
 
 		if (predraw)
 			items[id].predraw = predraw.bind(this);
@@ -63,6 +63,8 @@ export default class Zone extends Item {
 
 		if (predraw)
 			predraw(context, x, y, props);
+
+		super.redraw();
 
 		fragmentList.forEach(fragment => fragment.redraw());
 
