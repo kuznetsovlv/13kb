@@ -1,5 +1,7 @@
-(function (Document, Node, animator, expander, events) {
+(function (Document, Node, animator, keymap) {
 	"use strict";
+
+	var FPS = 24;
 
 	var CANVAS_WIDTH = 600;
 	var CANVAS_HEIGHT = 400;
@@ -20,7 +22,7 @@
 	var ROOM_FOOD_COLOR = "#f00";
 
 	var INITIAL_SNAKE_LENGTH = 3;
-	var SNAKE_COLOR = "#00f";
+	var SNAKE_COLOR = "#ff0";
 	var START_POINT_X = 1;
 	var START_POINT_Y = 1;
 	var SNAKE_INITIAL_HEAD_X = START_POINT_X + INITIAL_SNAKE_LENGTH - 1;
@@ -28,7 +30,12 @@
 	var DOUBLE_PI = 2 * Math.PI;
 
 	var INITIAL_SPEED_X = 1;
-	var INITIAL_SPEED_Y = 2;
+	var INITIAL_SPEED_Y = 0;
+
+	var DIRECTION_UP = "UP";
+	var DIRECTION_RIGHT = "RIGHT";
+	var DIRECTION_DOWN = "DOWN";
+	var DIRECTION_LEFT = "LEFT";
 
 	if (SNAKE_INITIAL_HEAD_X >= CELLS)
 		throw new Error("Incorrect initial data");
@@ -65,7 +72,6 @@
 
 		map.forEach (function (row, i) {
 			row.forEach(function (style, j) {
-				if (style === CELL_STYLE_FREE)
 					free.push({x: j, y: i});
 			});
 		});
@@ -77,9 +83,21 @@
 		map[point.y][point.x] = CELL_STYLE_FOOD;
 	}
 
+	function getDirection (key) {
+		var name = key.keyName;
+
+		if (name === 'W' || (/UP/.test(name) && !/PAGEUP/.test(name)))
+			return DIRECTION_UP;
+		if (name === 'A' || /LEFT/.test(name))
+			return DIRECTION_LEFT;
+		if (name === 'D' || /RIGHT/.test(name))
+			return DIRECTION_RIGHT;
+		if (name === 'S' || (/DOWN/.test(name) && !/PAGEDOWN/.test(name)))
+			return DIRECTION_DOWN;
+	}
+
 	window.onload = function () {
 		
-
 		var _document = new Document(document.body, {width: CANVAS_WIDTH, height: CANVAS_HEIGHT});
 		var room = new Node ({
 			draw: function (context, x, y, props) {
@@ -102,6 +120,7 @@
 			height: ROOM_SIZE,
 			predraw: function (context, x, y, props) {
 				context.beginPath();
+				context.clearRect(x, y, props.width, props.height);
 				context.lineWidth = ROOM_BORDER_WIDTH;
 				context.strokeStyle = ROOM_BORDER_COLOR;
 				context.fillStyle = ROOM_FILL_COLOR;
@@ -111,13 +130,69 @@
 		});
 
 		var speed = {
-			x: INITIAL_SPEED_X,
-			y: INITIAL_SPEED_Y
-		};
+		    	x: INITIAL_SPEED_X,
+		    	y: INITIAL_SPEED_Y
+		    },
+		    directionChanged = false,
+		    gameOver = false;
+
+		window.addEventListener('keydown', function (event) {
+			if (directionChanged)
+				return;
+
+			switch (getDirection(keymap(event))) {
+				case DIRECTION_UP: if (!speed.y) speed = {x: 0, y: -1}; directionChanged = true; break;
+				case DIRECTION_RIGHT: if (!speed.x) speed = {x: 1, y: 0}; directionChanged = true; break;
+				case DIRECTION_DOWN: if (!speed.y) speed = {x: 0, y: 1}; directionChanged = true; break;
+				case DIRECTION_LEFT: if (!speed.x) speed = {x: -1, y: 0}; directionChanged = true; break;
+			}
+		}, false);
 
 		setFood();
 
 		_document.addNode(room);
 		_document.redraw();
+
+		animator ((function () {
+			var prev = 0;
+
+			return function (alpha) {
+				alpha = alpha >> 0;
+
+				if (alpha - prev >= FPS / 2 && !gameOver) {
+					var head = snake[0];
+					var next = {x: head.x + speed.x, y: head.y + speed.y};
+					var row = map[next.y];
+
+					if (!row) {
+						gameOver = true;
+					} else {
+
+						switch (row[next.x]) {
+							case CELL_STYLE_FOOD:
+								snake.unshift(next);
+								row[next.x] = CELL_STYLE_SNAKE;
+								setFood();
+								room.draw();
+								break;
+							case CELL_STYLE_FREE:
+								var free = snake.pop();
+								map[free.y][free.x] = CELL_STYLE_FREE;
+								snake.unshift(next);
+								row[next.x] = CELL_STYLE_SNAKE;
+								room.draw();
+								break;
+							case CELL_STYLE_SNAKE:
+							default: gameOver = true;
+
+						}
+
+						directionChanged = gameOver;
+					}
+
+					prev = alpha;
+				}
+			}
+		})(), FPS);
 	}
-})(_13kb.Document, _13kb.Node, _13kb.animator, _13kb.expander, _13kb.events);
+})(_13kb.Document, _13kb.Node, _13kb.animator, _13kb.keymap);
