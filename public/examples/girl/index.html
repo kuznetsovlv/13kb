@@ -3,41 +3,34 @@
 <script type="text/javascript" src="../../index.js"></script>
 <script type="text/javascript">
 	window.onload = function () {
-		// var {Canvas, Item, animator} = _13kb;
 
-		var Canvas = _13kb.Canvas;
+		var Document = _13kb.Document;
 
-		var Item = _13kb.Item;
+		var Node = _13kb.Node;
 
 		var animator = _13kb.animator;
 
-		var canvas = new Canvas(document.body, {width: 500, height: 500});
+		var _document = new Document(document.body, {width: 500, height: 500});
 
-		var context = canvas.context;
+		var context = _document.context;
 
 		var img = new Image();
 
 		img.src = './4.png';
 
-		var props = {
-			frames: [
-				{x1: 12, y1: 0, x2: 108, y2: 145, x_shift: 0, y_shift: 0},
-				{x1: 110, y1: 0, x2: 180, y2: 145, x_shift: 0, y_shift: 0},
-				{x1: 197, y1: 0, x2: 247, y2: 145, x_shift: 0, y_shift: 0},
-				{x1: 266, y1: 0, x2: 336, y2: 145, x_shift: 0, y_shift: 0},
-				{x1: 341, y1: 0, x2: 413, y2: 145, x_shift: 0, y_shift: 0}
-			]
-		};
+		var frames = [
+			{x1: 12, y1: 0, x2: 108, y2: 145, x_shift: 0, y_shift: 0},
+			{x1: 110, y1: 0, x2: 180, y2: 145, x_shift: 0, y_shift: 0},
+			{x1: 197, y1: 0, x2: 247, y2: 145, x_shift: 0, y_shift: 0},
+			{x1: 266, y1: 0, x2: 336, y2: 145, x_shift: 0, y_shift: 0},
+			{x1: 341, y1: 0, x2: 413, y2: 145, x_shift: 0, y_shift: 0}
+		];
 
 		var draw = (function () {
 			var index = 0;
 
 			return function (context, x, y, frames) {
-				var frames = frames.frames;
-
 				frames = frames[(index++) % frames.length];
-
-				// var {x1, x2, y1, y2, x_shift, y_shift} = frames[(index++) % frames.length];
 
 				var x1 = frames.x1, x2 = frames.x2, y1 = frames.y1, y2 = frames.y2, x_shift = frames.x_shift, y_shift = frames.y_shift;
 
@@ -49,7 +42,7 @@
 		})();
 
 		img.addEventListener('load', function (event)  {
-			canvas.addFragment(new Item('girl', draw, 0, 0, props));
+			_document.addNode(new Node({draw: draw, x: 0, y: 0, frames: frames}));
 
 			animator((function () {
 				var prevAlpha = -1;
@@ -61,7 +54,7 @@
 
 					prevAlpha = alpha;
 
-					canvas.distClear().redraw();
+					_document.distClear().redraw();
 
 				}
 			})(), 8);

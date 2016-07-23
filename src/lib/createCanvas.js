@@ -1,10 +1,10 @@
 "use strict";
 
-const {screen: {availWidth, availHeight}} = window;
+const {innerHeight, innerWidth} = window;
 
 export default function (params ={}, root = document.body) {
 
-	const {width=availWidth, height=availHeight, ...remains} = params;
+	const {width=innerHeight, height=innerWidth, ...remains} = params;
 
 	const canvas = document.createElement('canvas');
 	const context = canvas.getContext('2d');
