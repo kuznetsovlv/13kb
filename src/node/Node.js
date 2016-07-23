@@ -23,14 +23,12 @@ export default class Node {
 		if (!id || items[id])
 			throw new Error('Element Item must have an unique id.');
 
-
-
-		const {draw, predraw, postdraw, children: [], ...rest} = props; console.log(props);
+		const {draw, predraw, postdraw, children = [], ...rest} = props;
 
 		if (typeof draw !== 'function')
 			throw new Errror ('The "draw" method must be a function.');
 
-		items[id] = {...rest, id, draw: draw.bind(this), item: this};
+		items[id] = {...rest, id, draw: draw.bind(this), children, item: this};
 
 		try {
 			Object.defineProperty(this, 'id', {get: () => id});
@@ -59,7 +57,7 @@ export default class Node {
 	}
 
 	addNode (node, pos = -1) {
-		const {children = []} = items[checkItem(this)];
+		const {children} = items[checkItem(this)];
 		const {length} = children;
 
 		while (pos < 0)
@@ -105,7 +103,7 @@ export default class Node {
 	}
 
 	draw () {
-		const {x = 0, y = 0, draw, predraw, postdraw, translate = {}, scale = {}, rotate = 0, children, ...rest} = items[checkItem(this)];
+		const {x = 0, y = 0, draw, predraw, postdraw, translate = {}, scale = {}, rotate = 0, children = [], ...rest} = items[checkItem(this)];
 		const {x:sx = 1, y:sy = 1} = scale;
 		const {x:tx = 0, y:ty = 0} = translate;
 		const context = this.context;

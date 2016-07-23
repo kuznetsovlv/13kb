@@ -19,7 +19,6 @@ const BABEL_QUERY = {
   plugins: [
     ['transform-object-rest-spread'],
     ['transform-class-properties'],
-    ["transform-es2015-destructuring"]
     // ['transform-decorators-legacy']
   ]
 };

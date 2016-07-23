@@ -6,7 +6,7 @@ const {innerHeight, innerWidth} = window;
 
 let that = {
 	background: x => x,
-	chidren: []
+	children: []
 };
 
 function configure (elem, attrs = {}) {
@@ -36,7 +36,7 @@ export default class Document {
 	}
 
 	addNode (node, pos = -1) {
-		const {children = []} = that;
+		const {children} = that;
 		const {length} = children;
 
 		while (pos < 0)
@@ -83,7 +83,7 @@ export default class Document {
 
 	redraw () {
 		const {context} = this;
-		const {children, background} = that;
+		const {children = [], background} = that;
 
 		context.beginPath();
 		context.save();

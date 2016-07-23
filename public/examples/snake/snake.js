@@ -1,4 +1,4 @@
-(function (Canvas, Item, Zone, animator, expander, events) {
+(function (Document, Node, animator, expander, events) {
 	"use strict";
 
 	var CANVAS_WIDTH = 600;
@@ -52,6 +52,8 @@
 
 	function fillCircle (context, x, y, r, color) {
 		context.fillStyle = color;
+		context.lineWidth = 0;
+		context.strokeStyle = "rgba(0, 0, 0, 0)"
 		context.beginPath();
 		context.moveTo(x + r, y);
 		context.arc(x, y, r, 0, DOUBLE_PI, false);
@@ -78,10 +80,9 @@
 	window.onload = function () {
 		
 
-		var canvas = new Canvas(document.body, {width: CANVAS_WIDTH, height: CANVAS_HEIGHT});
-		var room = new Zone (
-			'room',
-			function draw (context, x, y, props) {console.log(arguments);
+		var _document = new Document(document.body, {width: CANVAS_WIDTH, height: CANVAS_HEIGHT});
+		var room = new Node ({
+			draw: function (context, x, y, props) {
 				map.forEach (function (row, i) {
 					row.forEach(function (style, j) {
 						var x = (j + 0.5) * CELL_SIZE,
@@ -96,15 +97,18 @@
 					})
 				});
 			},
-			(CANVAS_WIDTH - ROOM_SIZE) / 2,
-			0,
-			{x: 1, y: 1},
-			{width: ROOM_SIZE, height: ROOM_SIZE, border: {lineWidth: ROOM_BORDER_WIDTH, strokeStyle: ROOM_BORDER_COLOR}},
-			function predraw (context, x, y, props) {
+			translate: {x: (CANVAS_WIDTH - ROOM_SIZE) / 2, y: 0},
+			width: ROOM_SIZE,
+			height: ROOM_SIZE,
+			predraw: function (context, x, y, props) {
+				context.beginPath();
+				context.lineWidth = ROOM_BORDER_WIDTH;
+				context.strokeStyle = ROOM_BORDER_COLOR;
 				context.fillStyle = ROOM_FILL_COLOR;
+				context.strokeRect(0, 0, props.width, props.height);
 				context.fillRect(0, 0, props.width, props.height);
 			}
-		);
+		});
 
 		var speed = {
 			x: INITIAL_SPEED_X,
@@ -113,7 +117,7 @@
 
 		setFood();
 
-		canvas.addFragment(room);
-		canvas.redraw();
+		_document.addNode(room);
+		_document.redraw();
 	}
-})(_13kb.Canvas, _13kb.Item, _13kb.Zone, _13kb.animator, _13kb.expander, _13kb.events);
+})(_13kb.Document, _13kb.Node, _13kb.animator, _13kb.expander, _13kb.events);
