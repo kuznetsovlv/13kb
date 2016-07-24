@@ -174,7 +174,7 @@
 
 				var delta = alpha - prev;
 
-				if (delta >= FPS / 2 && !gameOver) {
+				if (delta >= FPS / 4 && !gameOver) {
 					var head = snake[0];
 					var next = {x: head.x + speed.x, y: head.y + speed.y};
 					var row = map[next.y];
