@@ -52,12 +52,13 @@
 					alpha = alpha >> 0;
 
 					if (alpha <= prevAlpha)
-						return;
+						return true;
 
 					prevAlpha = alpha;
 
 					_document.distClear().redraw();
 
+					return true;
 				}
 			})(), 8);
 		}, false);
