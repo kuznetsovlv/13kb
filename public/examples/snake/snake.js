@@ -4,7 +4,8 @@
 	var FPS = 24;
 
 	var CANVAS_WIDTH = 600;
-	var CANVAS_HEIGHT = 400;
+	var CANVAS_HEIGHT = 500;
+	var PADDING = 10;
 
 	var ROOM_SIZE = 400;
 	var ROOM_FILL_COLOR = "#00ff00";
@@ -123,7 +124,7 @@
 					})
 				});
 			},
-			translate: {x: (CANVAS_WIDTH - ROOM_SIZE) / 2, y: 0},
+			translate: {x: PADDING, y: CANVAS_HEIGHT - PADDING - ROOM_SIZE},
 			width: ROOM_SIZE,
 			height: ROOM_SIZE,
 			predraw: function (context, x, y, props) {
