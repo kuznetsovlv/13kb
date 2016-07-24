@@ -72,7 +72,8 @@
 
 		map.forEach (function (row, i) {
 			row.forEach(function (style, j) {
-					free.push({x: j, y: i});
+					if (style === CELL_STYLE_FREE)
+						free.push({x: j, y: i});
 			});
 		});
 
@@ -97,10 +98,17 @@
 	}
 
 	window.onload = function () {
+
+		var speed = {
+		    	x: INITIAL_SPEED_X,
+		    	y: INITIAL_SPEED_Y
+		    },
+		    directionChanged = false,
+		    gameOver = false;
 		
 		var _document = new Document(document.body, {width: CANVAS_WIDTH, height: CANVAS_HEIGHT});
 		var room = new Node ({
-			draw: function (context, x, y, props) {
+			draw: function (context, x, y, props, alpha) {
 				map.forEach (function (row, i) {
 					row.forEach(function (style, j) {
 						var x = (j + 0.5) * CELL_SIZE,
@@ -119,22 +127,23 @@
 			width: ROOM_SIZE,
 			height: ROOM_SIZE,
 			predraw: function (context, x, y, props) {
+				var w = props.width, h = props.height;
 				context.beginPath();
 				context.clearRect(x, y, props.width, props.height);
 				context.lineWidth = ROOM_BORDER_WIDTH;
 				context.strokeStyle = ROOM_BORDER_COLOR;
 				context.fillStyle = ROOM_FILL_COLOR;
-				context.strokeRect(0, 0, props.width, props.height);
-				context.fillRect(0, 0, props.width, props.height);
+				context.moveTo(0, 0);
+				context.lineTo(w, 0);
+				context.lineTo(w, h);
+				context.lineTo(0, h);
+				context.closePath();
+				context.stroke();
+				context.fill();
+				
+				context.clip();
 			}
 		});
-
-		var speed = {
-		    	x: INITIAL_SPEED_X,
-		    	y: INITIAL_SPEED_Y
-		    },
-		    directionChanged = false,
-		    gameOver = false;
 
 		window.addEventListener('keydown', function (event) {
 			if (directionChanged)
@@ -157,9 +166,15 @@
 			var prev = 0;
 
 			return function (alpha) {
+				if (gameOver) {
+					return;
+				}
+
 				alpha = alpha >> 0;
 
-				if (alpha - prev >= FPS / 2 && !gameOver) {
+				var delta = alpha - prev;
+
+				if (delta >= FPS / 2 && !gameOver) {
 					var head = snake[0];
 					var next = {x: head.x + speed.x, y: head.y + speed.y};
 					var row = map[next.y];
@@ -184,7 +199,6 @@
 								break;
 							case CELL_STYLE_SNAKE:
 							default: gameOver = true;
-
 						}
 
 						directionChanged = gameOver;
@@ -192,6 +206,7 @@
 
 					prev = alpha;
 				}
+				return !gameOver;
 			}
 		})(), FPS);
 	}
