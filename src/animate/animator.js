@@ -25,9 +25,8 @@ export default function (animation, fps = 24) {
 
 		const alpha = (stamp - start) / period;
 
-		animation(alpha);
-
-		window.requestAnimationFrame(_animate);
+		if (animation(alpha))
+			window.requestAnimationFrame(_animate);
 	}
 
 	return window.requestAnimationFrame(_animate);
