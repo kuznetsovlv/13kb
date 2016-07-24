@@ -9,10 +9,10 @@ const createId = (function  () {
 
 })();
 
-function commitDraw (draw, context, x, y, props) {
+function commitDraw (draw, context, x, y, props, alpha) {
 	context.beginPath();
 	context.save();
-		draw(context, x, y, props);
+		draw(context, x, y, props, alpha);
 	context.restore();
 }
  
@@ -102,7 +102,7 @@ export default class Node {
 		return this;
 	}
 
-	draw () {
+	draw (alpha) {
 		const {x = 0, y = 0, draw, predraw, postdraw, translate = {}, scale = {}, rotate = 0, children = [], ...rest} = items[checkItem(this)];
 		const {x:sx = 1, y:sy = 1} = scale;
 		const {x:tx = 0, y:ty = 0} = translate;
@@ -114,20 +114,25 @@ export default class Node {
 		context.rotate(rotate);
 		context.scale(sx, sy);
 
-		if (predraw)
-			commitDraw(predraw, context, x, y, rest);
+		if (predraw) {
+			context.save();
+			predraw(context, x, y, rest, alpha);
+		}
 
-		commitDraw(draw, context, x, y, rest);
-
-		if (postdraw)
-			commitDraw(postdraw, context, x, y, rest);
+		commitDraw(draw, context, x, y, rest, alpha);
 
 		children.forEach(node => {
 			context.save()
 			context.beginPath();
-			node.draw();
+			node.draw(alpha);
 			context.restore();
 		});
+
+		if (postdraw)
+			commitDraw(postdraw, context, x, y, rest, alpha);
+
+		if (predraw)
+			context.restore();
 
 		context.restore();
 	}

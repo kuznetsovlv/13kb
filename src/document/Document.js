@@ -81,7 +81,7 @@ export default class Document {
 		return this;
 	}
 
-	redraw () {
+	redraw (alpha) {
 		const {context} = this;
 		const {children = [], background} = that;
 
@@ -93,7 +93,7 @@ export default class Document {
 		children.forEach(node => {
 			context.save()
 			context.beginPath();
-			node.draw();
+			node.draw(alpha);
 			context.restore();
 		});
 
