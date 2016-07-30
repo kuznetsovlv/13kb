@@ -151,7 +151,7 @@
 					})
 				});
 			},
-			translate: {x: PADDING, y: ROOM_VERTICAL_SHIFT},
+			transforms: [{type: 'translate', x: PADDING, y: ROOM_VERTICAL_SHIFT}],
 			width: ROOM_SIZE,
 			height: ROOM_SIZE,
 			predraw: function (context, x, y, props) {
@@ -214,7 +214,7 @@
 				context.textBaseline = 'middle';
 				context.fillText(['Score', props.score].join(': '), x, y);
 			},
-			translate: {x: PADDING, y: PADDING},
+			transforms: [{type: 'translate', x: PADDING, y: PADDING}],
 			x: PADDING,
 			y: SCORE_HEIGHT / 2,
 			width: SCORE_WIDTH,
@@ -247,7 +247,7 @@
 				context.fillText('Loot:', x, y);
 				context.fillText(props.loot, x, y + LOOT_STRING_DISTANSE);
 			},
-			translate: {x: 2 * PADDING + SCORE_WIDTH, y: PADDING},
+			transforms: [{type: 'translate', x: 2 * PADDING + SCORE_WIDTH, y: PADDING}],
 			x: LOOT_WIDTH / 2,
 			y: (LOOT_HEIGHT - LOOT_STRING_DISTANSE) / 2,
 			width: LOOT_WIDTH,
@@ -280,7 +280,7 @@
 				context.fillText(['Length', snake.length].join(': '), x, 50);
 				context.fillText(['Eaten', props.eaten].join(': '), x, 150);
 			},
-			translate: {x: 2 * PADDING + ROOM_SIZE, y: 2 * PADDING + LOOT_HEIGHT},
+			transforms: [{type: 'translate', x: 2 * PADDING + ROOM_SIZE, y: 2 * PADDING + LOOT_HEIGHT}],
 			x: PADDING,
 			width: STAT_WIDTH,
 			height: STAT_HEIGHT,

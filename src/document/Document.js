@@ -63,6 +63,10 @@ export default class Document {
 		return this;
 	}
 
+	getProps (name) {
+		return name ? that[name] : that;
+	}
+
 	setBackground (func) {
 		if (typeof func !== 'function')
 			throw new Error('Argument must be a function');

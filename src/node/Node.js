@@ -1,6 +1,7 @@
 "use strict";
 
 import {items, checkItem} from '../lib/private';
+import {transformContext} from '../lib/cst';
 
 const createId = (function  () {
 	let id = 0;
@@ -103,16 +104,12 @@ export default class Node {
 	}
 
 	draw (alpha) {
-		const {x = 0, y = 0, draw, predraw, postdraw, translate = {}, scale = {}, rotate = 0, children = [], ...rest} = items[checkItem(this)];
-		const {x:sx = 1, y:sy = 1} = scale;
-		const {x:tx = 0, y:ty = 0} = translate;
+		const {x = 0, y = 0, draw, predraw, postdraw, transforms =[], children = [], ...rest} = items[checkItem(this)];
 		const context = this.context;
 
 		context.beginPath();
 		context.save();
-		context.translate(tx, ty);
-		context.rotate(rotate);
-		context.scale(sx, sy);
+		transformContext(context, transforms);
 
 		if (predraw) {
 			context.save();
