@@ -133,4 +133,16 @@ export default class Node {
 
 		context.restore();
 	}
+
+	toSystem ({x, y}) {
+		const {transforms =[]} = items[checkItem(this)];
+
+		return toSystem({x, y}, transforms);
+	}
+
+	toExtraSystem ({x, y}) {
+		const {transforms =[]} = items[checkItem(this)];
+
+		return fromSystem({x, y}, transforms);
+	}
 };
