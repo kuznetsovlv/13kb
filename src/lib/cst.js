@@ -33,7 +33,9 @@ export function toSystem ({x = 0, y = 0}, transorms = []) {
 }
 
 export function fromSystem ({x = 0, y = 0}, transorms = []) {
-	return transorms.reduce (({type, x:tx, y:ty, angle = 0}, i) => {
+	const {length} = transforms;
+	const last = length - 1;
+	return transorms.map((x, i) => transforms[last - i]).reduce (({type, x:tx, y:ty, angle = 0}, i) => {
 		switch (type) {
 			case 'translate': x += (tx || 0); y += (ty || 0); break;
 			case 'scale': x *= (tx || 1); y *= (ty || 1); break;
