@@ -1,29 +1,37 @@
 "use strict";
 
 export default function expander (elem, ...interfaces) {
-	elem.expand = (function (...interfaces) {
-		const {length} = interfaces
-		for (let i = 0; i < length; ++i) {
-			const iface = interfaces[i];
 
-			for (let key in iface) {
-				const value = iface[key];
+	function add (obj, val) {
+		try {
+			return val.bind(obj);
+		} catch (e) {
+			if (!val || typeof val !== 'object')
+				return val;
 
-				try {
-					this[key] = value.bind(this);
-				} catch (e) {
-					if (typeof value === 'object') {
-						if (value instanceof Array) {
-							this[key] = [...value];
-						} else {
-							this[key] = {...value};
-						}
-					} else {
-						this[key] = value;
-					}
-				}
+			let res;
+
+			if (val instanceof Array) {
+				res = [];
+
+				for (let i = 0, length = val.length; i < length; ++i)
+					res.push(add(res, val[i]));
+			} else {
+				res = {};
+
+				for (let key in val)
+					res[key] = add(res, val[key]);
 			}
+
+			return res;
 		}
+	}
+
+	elem.expand = (function (...interfaces) {
+		interfaces.forEach(iface => {
+			for (let key in iface)
+				elem[key] = add(elem, iface[key]);
+		});
 
 		return this;
 	}).bind(elem);
