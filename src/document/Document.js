@@ -1,6 +1,9 @@
 "use strict";
 
-import createCanvas from '../lib/createCanvas';
+import createCanvas        from '../lib/createCanvas';
+import expander            from '../lib/expander';
+import * as eventInterfase from '../interfaces/events';
+
 
 const {innerHeight, innerWidth} = window;
 
@@ -24,7 +27,9 @@ export default class Document {
 
 		that = {...that, ...createCanvas({...params, width, height}, elem)}
 
-		'addNode,removeNodes,redraw,clear,distClear'.split(',').forEach(key => this[key] = this[key].bind(this));
+		'addNode,removeNodes,redraw,clear,distClear,getProps,setProps,setBackground'.split(',').forEach(key => this[key] = this[key].bind(this));
+
+		expander(this, eventInterfase);
 	}
 
 	get context () {
@@ -67,6 +72,16 @@ export default class Document {
 		return name ? that[name] : that;
 	}
 
+	setProps (props = {}, mod) {
+
+		if (mod)
+			that = {...that, ...props}
+		else
+			that = {...props};
+
+		return this;
+	}
+
 	setBackground (func) {
 		if (typeof func !== 'function')
 			throw new Error('Argument must be a function');
@@ -104,5 +119,13 @@ export default class Document {
 		context.restore();
 
 		return this;
+	}
+
+	toSystem ({x, y}) {
+		return {x, y};
+	}
+
+	toExtraSystem ({x, y}) {
+		return {x, y};
 	}
 }

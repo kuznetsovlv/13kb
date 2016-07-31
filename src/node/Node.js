@@ -2,6 +2,8 @@
 
 import {items, checkItem}                       from '../lib/private';
 import {transformContext, toSystem, fromSystem} from '../lib/cst';
+import expander                                 from '../lib/expander';
+import * as eventInterfase                      from '../interfaces/events';
 
 const createId = (function  () {
 	let id = 0;
@@ -44,7 +46,9 @@ export default class Node {
 				items[id].postdraw = postdraw.bind(this);
 		} catch (e) {}
 
-		'addNode,removeNodes,draw,getProps,setProps'.split(',').forEach(key => this[key] = this[key].bind(this));
+		'addNode,removeNodes,draw,getProps,setProps,toSystem,toExtraSystem'.split(',').forEach(key => this[key] = this[key].bind(this));
+
+		expander(this, eventInterfase);
 	}
 
 	get context () {
