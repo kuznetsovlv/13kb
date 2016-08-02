@@ -12,24 +12,21 @@ let that = {
 	children: []
 };
 
-function configure (elem, attrs = {}) {
-	for (let key in attrs)
-		elem.setAttribute(key, attrs[key]);
-}
-
 export default class Document {
 	constructor (elem, params = {}) {
 
 		if (that.canvas) 
 			throw new Error("Canvas element allways initialised.");
 
-		const {width=innerWidth, height=availHeight, ...attrs} = params;
+		const {width = innerWidth, height = innerHeight, transitEvents = [], ...attrs} = params;
 
-		that = {...that, ...createCanvas({...params, width, height}, elem)}
+		that = {...that, ...createCanvas({...params, width, height}, elem), ...attrs}
 
 		'addNode,removeNodes,redraw,clear,distClear,getProps,setProps,setBackground'.split(',').forEach(key => this[key] = this[key].bind(this));
 
 		expander(this, eventInterfase);
+
+		transitEvents.forEach(type => that.canvas.addEventListener(type, event => console.log(this, event), false));
 	}
 
 	get context () {
