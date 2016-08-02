@@ -48,7 +48,7 @@ export function emit (event) {
 }
 
 const preHandlers = {
-	'click,mouseUp,mouseDown,mouseEnter,mouseLive,mouseMove': function (event) {
+	'click,dblclick,mouseup,mousedown,mouseenter,mouseleave,mousemove': function (event) {
 		const {path, data} = event;
 
 		return {...event, path, data: this.toSystem(data)};
@@ -64,6 +64,6 @@ export const defaultPrehandlers = {
 			key.split(',').forEach(k => preHandlerList[k] = func);
 		}
 
-		elem.setProps({prHAndlerList}, true);
+		elem.setProps({preHandlerList}, true);
 	}
 };
