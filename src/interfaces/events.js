@@ -1,5 +1,8 @@
 "use strict";
 
+import Document from '../document/Document';
+import Node     from '../node/Node';
+
 export function on (type, handler) {
 	if (typeof handler !== 'function')
 		throw new Error('Handler must be a function');
@@ -21,7 +24,10 @@ export function on (type, handler) {
 
 export function emit (event) {
 	const {handlerList = {}, preHandlerList = {}, children = [], parent} = this.getProps();
-	const {type, path} = event;
+	const {type, path, target} = event;
+
+	if (!target || !(traget instanceof Document || target instanceof Node))
+		event.target = this;
 	
 
 	const preHandler = preHandlerList[type];

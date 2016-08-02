@@ -3,6 +3,7 @@
 import createCanvas        from '../lib/createCanvas';
 import expander            from '../lib/expander';
 import * as eventInterfase from '../interfaces/events';
+import eventFactory        from '../event/event-factory';
 
 
 const {innerHeight, innerWidth} = window;
