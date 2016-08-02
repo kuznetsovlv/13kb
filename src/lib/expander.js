@@ -19,8 +19,11 @@ export default function expander (elem, ...interfaces) {
 			} else {
 				res = {};
 
-				for (let key in val)
-					res[key] = add(res, val[key]);
+				for (let key in val) {
+					const v = add(res, val[key]);
+					if (v !== undefined)
+						res[key] = v;
+				}
 			}
 
 			return res;
@@ -29,8 +32,11 @@ export default function expander (elem, ...interfaces) {
 
 	elem.expand = (function (...interfaces) {
 		interfaces.forEach(iface => {
-			for (let key in iface)
-				elem[key] = add(elem, iface[key]);
+			for (let key in iface) {
+				const v = add(elem, iface[key]);
+				if (v !== undefined)
+					elem[key] = v;
+			}
 		});
 
 		return this;
