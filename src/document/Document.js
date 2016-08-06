@@ -2,9 +2,40 @@
 
 import createCanvas        from '../lib/createCanvas';
 import expander            from '../lib/expander';
+import getModifiers        from '../lib/modifiers';
 import * as eventInterfase from '../interfaces/events';
 import eventFactory        from '../event/event-factory';
 
+function rect (elem) {
+	const rect = elem.getBoundingClientRect();
+
+	if (!rect.width)
+		rect.width = rect.right - rect.left;
+	if (!rect.height)
+		rect.height = rect.bottom - rect.top;
+	return rect;
+}
+// click,dblclick,mouseup,mousedown,mouseenter,mouseleave,mousemove
+function getData (event, canvas) {
+	const {type, target, clientX, clientY} = event;
+	const {width, height} = canvas;
+	const modifiers = getModifiers(event); console.log(modifiers);
+
+	switch (type) {
+		case 'click':
+		case 'dblclick':
+		case 'mouseup':
+		case 'mousedown': 
+		case 'mouseenter':
+		case 'mouseleave':
+		case 'mousemove':
+			const {left, width: DOMWidth, top, height: DOMHeight} = rect(canvas);
+			const x = (clientX - left) * width / DOMWidth;
+			const y = (clientY - top) * height / DOMHeight;
+			return {modifiers, coords: {x, y}};
+		default: return {modifiers};
+	}
+}
 
 const {innerHeight, innerWidth} = window;
 
@@ -27,7 +58,13 @@ export default class Document {
 
 		expander(this, eventInterfase);
 
-		transitEvents.forEach(type => that.canvas.addEventListener(type, event => console.log(this, event), false));
+		transitEvents.forEach(type => that.canvas.addEventListener(type, event => {
+			const {type} = event;
+			const data = getData (event, that.canvas);
+
+			this.emit(eventFactory({type, target: this, data, isTransitable: true}));
+
+		}, false));
 	}
 
 	get context () {
@@ -72,10 +109,12 @@ export default class Document {
 
 	setProps (props = {}, mod) {
 
+		const {canvas, context} = that;
+
 		if (mod)
-			that = {...that, ...props}
+			that = {...that, ...props, canvas, context}
 		else
-			that = {...props};
+			that = {...props, canvas, context};
 
 		return this;
 	}

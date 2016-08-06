@@ -54,9 +54,9 @@ export function emit (event) {
 
 const preHandlers = {
 	'click,dblclick,mouseup,mousedown,mouseenter,mouseleave,mousemove': function (event) {
-		const {path, data} = event;
+		const {path, data, data: {coords}} = event;
 
-		return {...event, path, data: this.toSystem(data)};
+		return {...event, path, data: {...data, coords: this.toSystem(coords)}};
 	}
 };
 

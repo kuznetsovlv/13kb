@@ -16,7 +16,7 @@
 
 		var animator = _13kb.animator;
 
-		var _document = new Document(document.body, {width: 500, height: 500, transitEvents: 'click,dblclick,mouseup,mousedown,mouseenter,mouseleave,mousemove'.split(',')});
+		var _document = new Document(document.body, {width: 500, height: 500, transitEvents: 'click,dblclick,mouseup,mousedown,mouseenter,mouseleave,mousemove'.split(',')}).on('click', event => console.log(event));
 
 		
 	}

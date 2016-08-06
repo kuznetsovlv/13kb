@@ -1,3 +1,5 @@
+import getModifiers from './modifiers';
+
 const keyCodeToKeyName = {
 	8:"Backspace", 9:"Tab", 13:"Enter", 16:"Shift", 17:"Control", 18:"Alt",
 	19:"Pause", 20:"CapsLock", 27:"Esc", 32:"Spacebar", 33:"PageUp",
@@ -15,16 +17,6 @@ const keyCodeToKeyName = {
 };
 
 export default function keymap (event) {
-	let modifiers = '';
-
-	if (event.altKey)
-		modifiers = `alt+${modifiers}`;
-	if (event.ctrlKey)
-		modifiers = `ctrl+${modifiers}`;
-	if (event.metaKey)
-		modifiers = `meta+${modifiers}`;
-	if (event.shiftKey)
-		modifiers = `shift+${modifiers}`;
 
 	const {key, keyIdentifier, keyCode} = event;
 
@@ -32,6 +24,8 @@ export default function keymap (event) {
 
 	if (!keyName)
 		return;
+
+	const modifiers = getModifiers (event);
 
 	const keyId = `${modifiers}${keyName.toLowerCase()}`;
 
