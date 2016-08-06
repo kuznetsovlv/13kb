@@ -19,7 +19,7 @@ function rect (elem) {
 function getData (event, canvas) {
 	const {type, target, clientX, clientY} = event;
 	const {width, height} = canvas;
-	const modifiers = getModifiers(event); console.log(modifiers);
+	const modifiers = getModifiers(event);
 
 	switch (type) {
 		case 'click':
