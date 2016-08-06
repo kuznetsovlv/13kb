@@ -26,24 +26,23 @@ export function emit (event) {
 	const {handlerList = {}, preHandlerList = {}, children = [], parent} = this.getProps();
 	const {type, path, target} = event;
 
-	if (!target || !(traget instanceof Document || target instanceof Node))
+	if (!target || !(target instanceof Document || target instanceof Node))
 		event.target = this;
 	
 
 	const preHandler = preHandlerList[type];
-
 	if (preHandler)
-		event = preHandler(event)
+		event = preHandler(event);
 
 	(handlerList[type] || []).forEach(method => method.call(this, {...event, path}));
 
 	if (path) {
-		const prev = path[path.length - 1];
+		const prev = path.slice(-1)[0];
 		const _path = path.map(x => x);
 		
 		_path.push(this);
 
-		if (parent !== prev)
+		if (parent && parent !== prev)
 			parent.emit({...event, path: _path});
 
 		if (!children.some(x => x === prev))
