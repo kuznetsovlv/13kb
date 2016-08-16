@@ -6,6 +6,21 @@ const path = require('path');
 const NODE_ENV = process.env.NODE_ENV || "development";
 const DEV = NODE_ENV === "development";
 const TEST = NODE_ENV === "test";
+const DESTINATION = process.env.DEST || 'web';
+
+const library = '_13kb';
+const buildPath = path.resolve(__dirname, 'public');
+
+function getOutput () {
+	switch (DESTINATION) {
+		case 'node':
+			return {filename: 'index.js', path: path.resolve(__dirname, 'dist'), library, libraryTarget: 'umd'};
+		case 'web':
+		default:
+			return TEST ? {filename: 'index.js', path: buildPath, library} : {filename: '[name].js', path: buildPath, library};
+	}
+	
+}
 
 const entries = (TEST ? 'test' : 'index').split(',');
 
@@ -55,15 +70,11 @@ module.exports = {
 
 	entry: entry,
 
-	output: TEST ? {
-		filename: 'index.js',
-		path: path.resolve(__dirname, 'public'),
-		library: '_13kb'
-	} : {
-		filename: '[name].js',
-		path: path.resolve(__dirname, 'public'),
-		library: '_13kb'
-	},
+	noInfo: true,
+
+	target: DESTINATION,
+
+	output: getOutput(),
 
 	watch: DEV || TEST,
 
