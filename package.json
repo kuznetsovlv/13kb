@@ -14,12 +14,12 @@
   "author": "Kuznetsov Leonid",
   "license": "ISC",
   "dependencies": {
-  	"babel-core": "^6.10.4",
+    "babel-core": "^6.10.4",
     "babel-loader": "^6.2.4",
     "babel-plugin-transform-class-properties": "^6.10.2",
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
     "babel-preset-es2015": "^6.9.0",
     "webpack": "^1.13.1"
-  	},
+    },
   "devDependencies": {}
 }
